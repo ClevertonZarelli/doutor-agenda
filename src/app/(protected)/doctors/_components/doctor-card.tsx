@@ -131,7 +131,10 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteDoctorClick}>
+              <AlertDialogAction
+                onClick={handleDeleteDoctorClick}
+                className="bg-red-500 hover:bg-red-600"
+              >
                 Deletar
               </AlertDialogAction>
             </AlertDialogFooter>
