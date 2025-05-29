@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import z from "zod";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,14 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormMessage } from "@/components/ui/form";
+import { FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
@@ -32,17 +27,16 @@ const registerSchema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, { message: "Email é obrigatório" })
-    .email({ message: "Email inválido" }),
+    .min(1, { message: "E-mail é obrigatório" })
+    .email({ message: "E-mail inválido" }),
   password: z
     .string()
     .trim()
-    .min(8, { message: "Senha deve ter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
 });
 
-export const SignUpForm = () => {
+const SignUpForm = () => {
   const router = useRouter();
-
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -56,20 +50,19 @@ export const SignUpForm = () => {
     await authClient.signUp.email(
       {
         email: values.email,
-        name: values.name,
         password: values.password,
-        //Chamada apos usuario verificar email
-        callbackURL: "/dashboard",
+        name: values.name,
       },
       {
-        onSuccess: () => router.push("/dashboard"),
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
         onError: (ctx) => {
           if (ctx.error.code === "USER_ALREADY_EXISTS") {
-            toast.error("E-mail já cadastrado");
+            toast.error("E-mail já cadastrado.");
             return;
           }
-
-          toast.error("Erro ao criar conta");
+          toast.error("Erro ao criar conta.");
         },
       },
     );
@@ -77,15 +70,13 @@ export const SignUpForm = () => {
 
   return (
     <Card>
-      {/* Register Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <CardHeader>
-            <CardTitle>Criar Conta</CardTitle>
-            <CardDescription>Registre-se para continuar</CardDescription>
+            <CardTitle>Criar conta</CardTitle>
+            <CardDescription>Crie uma conta para continuar.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Field Name */}
             <FormField
               control={form.control}
               name="name"
@@ -99,7 +90,6 @@ export const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* Field Email */}
             <FormField
               control={form.control}
               name="email"
@@ -107,13 +97,12 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="Informe seu e-mail" {...field} />
+                    <Input placeholder="Digite seu e-mail" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Field Password */}
             <FormField
               control={form.control}
               name="password"
@@ -121,7 +110,11 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite sua senha" {...field} />
+                    <Input
+                      placeholder="Digite sua senha"
+                      type="password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,7 +136,8 @@ export const SignUpForm = () => {
           </CardFooter>
         </form>
       </Form>
-      {/* Form End */}
     </Card>
   );
 };
+
+export default SignUpForm;
