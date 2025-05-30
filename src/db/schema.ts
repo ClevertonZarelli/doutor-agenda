@@ -21,7 +21,7 @@ export const usersTable = pgTable("users", {
 });
 
 export const usersTableRelations = relations(usersTable, ({ many }) => ({
-  usersToClinics: many(usersToClinicsTable),
+  usersToClinics: many(userToClinicsTable),
 }));
 
 export const sessionsTable = pgTable("sessions", {
@@ -73,7 +73,7 @@ export const clinicsTable = pgTable("clinics", {
     .$onUpdate(() => new Date()),
 });
 
-export const usersToClinicsTable = pgTable("user_to_clinics", {
+export const userToClinicsTable = pgTable("user_to_clinics", {
   userId: text("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
@@ -87,14 +87,14 @@ export const usersToClinicsTable = pgTable("user_to_clinics", {
 });
 
 export const usersToClinicsTableRelations = relations(
-  usersToClinicsTable,
+  userToClinicsTable,
   ({ one }) => ({
     user: one(usersTable, {
-      fields: [usersToClinicsTable.userId],
+      fields: [userToClinicsTable.userId],
       references: [usersTable.id],
     }),
     clinic: one(clinicsTable, {
-      fields: [usersToClinicsTable.clinicId],
+      fields: [userToClinicsTable.clinicId],
       references: [clinicsTable.id],
     }),
   }),
@@ -104,7 +104,7 @@ export const clinicsTableRelations = relations(clinicsTable, ({ many }) => ({
   doctors: many(doctorsTable),
   patients: many(patientsTable),
   appointments: many(appointmentsTable),
-  usersToClinics: many(usersToClinicsTable),
+  usersToClinics: many(userToClinicsTable),
 }));
 
 export const doctorsTable = pgTable("doctors", {
@@ -169,6 +169,7 @@ export const patientsTableRelations = relations(
 export const appointmentsTable = pgTable("appointments", {
   id: uuid("id").defaultRandom().primaryKey(),
   date: timestamp("date").notNull(),
+  appointmentPriceInCents: integer("appointment_price_in_cents").notNull(),
   clinicId: uuid("clinic_id")
     .notNull()
     .references(() => clinicsTable.id, { onDelete: "cascade" }),

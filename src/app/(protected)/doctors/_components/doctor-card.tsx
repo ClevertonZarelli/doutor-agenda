@@ -110,6 +110,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
               availableToTime: availability.to.format("HH:mm:ss"),
             }}
             onSuccess={() => setIsUpsertDoctorDialogOpen(false)}
+            isOpen={isUpsertDoctorDialogOpen}
           />
         </Dialog>
         <AlertDialog>
@@ -131,10 +132,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleDeleteDoctorClick}
-                className="bg-red-500 hover:bg-red-600"
-              >
+              <AlertDialogAction onClick={handleDeleteDoctorClick}>
                 Deletar
               </AlertDialogAction>
             </AlertDialogFooter>
