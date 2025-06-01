@@ -16,12 +16,15 @@ export const usersTable = pgTable("users", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  plan: text("plan"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
 
 export const usersTableRelations = relations(usersTable, ({ many }) => ({
-  usersToClinics: many(userToClinicsTable),
+  usersToClinics: many(usersToClinicsTable),
 }));
 
 export const sessionsTable = pgTable("sessions", {
@@ -73,7 +76,7 @@ export const clinicsTable = pgTable("clinics", {
     .$onUpdate(() => new Date()),
 });
 
-export const userToClinicsTable = pgTable("user_to_clinics", {
+export const usersToClinicsTable = pgTable("users_to_clinics", {
   userId: text("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
@@ -87,14 +90,14 @@ export const userToClinicsTable = pgTable("user_to_clinics", {
 });
 
 export const usersToClinicsTableRelations = relations(
-  userToClinicsTable,
+  usersToClinicsTable,
   ({ one }) => ({
     user: one(usersTable, {
-      fields: [userToClinicsTable.userId],
+      fields: [usersToClinicsTable.userId],
       references: [usersTable.id],
     }),
     clinic: one(clinicsTable, {
-      fields: [userToClinicsTable.clinicId],
+      fields: [usersToClinicsTable.clinicId],
       references: [clinicsTable.id],
     }),
   }),
@@ -104,7 +107,7 @@ export const clinicsTableRelations = relations(clinicsTable, ({ many }) => ({
   doctors: many(doctorsTable),
   patients: many(patientsTable),
   appointments: many(appointmentsTable),
-  usersToClinics: many(userToClinicsTable),
+  usersToClinics: many(usersToClinicsTable),
 }));
 
 export const doctorsTable = pgTable("doctors", {

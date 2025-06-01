@@ -68,10 +68,7 @@ const PatientsTableActions = ({ patient }: PatientsTableActionsProps) => {
             </DropdownMenuItem>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <DropdownMenuItem
-                  className="bg-red-500 text-white hover:bg-red-600"
-                  onSelect={(e) => e.preventDefault()}
-                >
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <TrashIcon />
                   Excluir
                 </DropdownMenuItem>
